@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/ZohaibA99/auth-template#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "mongoose": "^7.6.3"

@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
-        unique: true,
+        unique: [true, "username already exists"]
     },
     email: {
         type: String,
@@ -19,4 +19,4 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-export default User;
+module.exports = User
