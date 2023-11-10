@@ -3,21 +3,35 @@ import { useState } from "react";
 
 export default function SignUp() {
     const [formData, setFormData] = useState({});
+    const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     const handleChange = (e) => {
         setFormData({...formData, [e.target.id]:e.target.value})
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const res = await fetch('http://localhost:3000/api/auth/signup', {
-            method: "POST",
-            headers: {
-                "Content-Type": 'application/json'
-            },
-            body: JSON.stringify(formData),
-        })
-        const data = await res.json();
-        console.log(data);
+        try{
+            setLoading(true);
+            const res = await fetch('http://localhost:3000/api/auth/signup', {
+                method: "POST",
+                headers: {
+                    "Content-Type": 'application/json'
+                },
+                body: JSON.stringify(formData),
+            })
+            const data = await res.json();
+            setLoading(false);
+            if(data.success === false){
+                setError(true);
+                return;
+            }
+            setError(false);
+        }catch(e){
+            setLoading(false);
+            setError(true);
+        }
     }
 
     return (
@@ -46,7 +60,12 @@ export default function SignUp() {
                 onChange={handleChange}></input>
 
                 
-                <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80' type='submit'>SignUp</button>
+                <button 
+                disabled={loading}
+                className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80' 
+                type='submit'>
+                    {loading ? 'Loading. . .' : "Sign Up"}
+                </button>
             </form>
             <div className='flex gap-2 mt-5'>
                 <p>Have an account?</p>
@@ -54,6 +73,7 @@ export default function SignUp() {
                     <span className='text-blue-500'>Sign in</span>
                 </Link>
             </div>
+            <p className='text-red-700 mt-5'>{error && "something went wrong"}</p>
         </div>
     )
 }
