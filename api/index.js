@@ -38,6 +38,7 @@ app.use('/api/auth', authRoutes)
 app.get('/', (req, res, next) => {
     res.json({ message: 'CORS is activated' });
   });
+  
 //middleware for our server simple error handling
 //call next(error) in the controller to use this middle ware
 app.use((err, req, res, next) => {
