@@ -1,10 +1,11 @@
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { useState } from "react";
 
 export default function SignUp() {
     const [formData, setFormData] = useState({});
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({...formData, [e.target.id]:e.target.value})
@@ -27,7 +28,7 @@ export default function SignUp() {
                 setError(true);
                 return;
             }
-            setError(false);
+            navigate('/sign-in');
         }catch(e){
             setLoading(false);
             setError(true);
@@ -47,7 +48,7 @@ export default function SignUp() {
 
                 <input 
                 type="email" 
-                placeholder='Pmail' 
+                placeholder='Email' 
                 id='email' 
                 className='bg-slate-100 p-3 rounded-lg'
                 onChange={handleChange}></input>

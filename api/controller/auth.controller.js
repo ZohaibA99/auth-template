@@ -26,22 +26,27 @@ const signIn = async (req, res, next) => {
         //check that the username provided is valid
         const validUser = await User.findOne({email: email})
         if (!validUser){
-            return next(new errorHandler(401, 'Invalid Credentials'));
+            return next(errorHandler(401, 'Invalid Credentials'));
         }
 
         //now check the password
         const validPassword = bcryptjs.compareSync(password, validUser.password);
         if (!validPassword){
-            return next(new errorHandler(401, 'Invalid Credentials'));
+            return next(errorHandler(401, 'Invalid Credentials'));
         }
-        const{password: hashPassword, ...userObj} = validUser._doc;
         //now if there are no errors with signup 
         //add a token to the cookie of the users browser 
         //(jwt) - jsonwebtoken 
         const token = jwt.sign({id: validUser._id}, process.env.SECRET_PHRASE);
-        res.cookie('access_token', token, {httpOnly: true}).status(200).json(userObj);
+        const{password: hashedPassword, ...userObj} = validUser._doc;
+        const expiryDate = new Date(Date.now() + 3600000) //1 hour
+        res
+            .cookie('access_token', token, {httpOnly: true, 
+                expires: expiryDate})
+            .status(200)
+            .json(userObj);
     }catch(e){
-        next(error);
+        next(e);
     }
 
 } 
