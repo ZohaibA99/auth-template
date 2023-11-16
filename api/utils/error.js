@@ -1,8 +1,6 @@
-//custom function here to handle errors
-const errorHandler = (statusCode, message) => {
-    const error = new Error(message);
-    error.statusCode = statusCode;
-    error.message = message;
-    return error;
-}
-module.exports = errorHandler;
+export const errorHandler = (statusCode, message) => {
+  const error = new Error();
+  error.statusCode = statusCode;
+  error.message = message;
+  return error;
+};
